@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/buttonCamActivity"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="50dp"
+        android:text="Start Cam Activity"
+        android:textAllCaps="false" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
+
+        <EditText
+            android:id="@+id/textHorizontalAngle"
+            android:layout_width="200dp"
+            android:layout_height="50dp"/>
+
+        <Button
+            android:id="@+id/buttonGoToHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:text="Horizontal Goto"
+            android:textAllCaps="false"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
+
+        <EditText
+            android:id="@+id/textVerticalAngle"
+            android:layout_width="200dp"
+            android:layout_height="50dp"/>
+
+        <Button
+            android:id="@+id/buttonGoToVertical"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:text="Vertical Goto"
+            android:textAllCaps="false"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:layout_marginLeft="20dp"/>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="right">
+
+            <Button
+                android:id="@+id/buttonRestore"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="20dp"
+                android:text="Restore"
+                android:textAllCaps="false"/>
+        </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="50dp">
+        <Button
+            android:id="@+id/buttonUp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Up"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left">
+
+            <Button
+                android:id="@+id/buttonLeft"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:text="Left"
+                android:textAllCaps="false" />
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right">
+
+            <Button
+                android:id="@+id/buttonRight"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:text="Right"
+                android:textAllCaps="false"
+                android:layout_marginRight="20dp"
+            />
+
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/buttonDown"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Down"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/buttonBTConnect"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Connect"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/buttonBTCMD1"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="CMD 1"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="false" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+
+</android.support.v7.widget.LinearLayoutCompat>
