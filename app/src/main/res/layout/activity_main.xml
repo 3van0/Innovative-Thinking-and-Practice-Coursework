@@ -67,6 +67,9 @@
             android:textAllCaps="false"
             android:layout_marginLeft="20dp"/>
 
+
+
+
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
@@ -80,6 +83,20 @@
                 android:text="Restore"
                 android:textAllCaps="false"/>
         </android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:layout_gravity="center_horizontal"/>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
