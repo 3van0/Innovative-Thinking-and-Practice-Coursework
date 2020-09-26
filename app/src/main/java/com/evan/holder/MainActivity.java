@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mbuttonDown;
     private Button mbuttonBTConnect;
     private Button mbuttonBTCMD1;
+    private TextView mtextHorizontalAngle;
+    private TextView mtextVerticalAngle;
 
     //private String[] strSavings = new String[0];
 
@@ -56,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         mbuttonDown = findViewById(R.id.buttonDown);
         mbuttonBTConnect = findViewById(R.id.buttonBTConnect);
         mbuttonBTCMD1 = findViewById(R.id.buttonBTCMD1);
+        mtextHorizontalAngle = findViewById(R.id.textHorizontalAngle);
+        mtextVerticalAngle = findViewById(R.id.textVerticalAngle);
 
         setListeners();
 
@@ -102,10 +107,14 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.buttonGoToHorizontal:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
+                    currentServoPos1 = Integer.parseInt(mtextHorizontalAngle.getText().toString());
+                    mBlue.SendMessage("h" + currentServoPos1 );
                     break;
                 case R.id.buttonGoToVertical:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
+                    currentServoPos2 = Integer.parseInt(mtextVerticalAngle.getText().toString());
+                    mBlue.SendMessage("v" + currentServoPos2);
                     break;
                 case R.id.buttonSave:
                     final EditText et = new EditText(MainActivity.this);
@@ -126,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
                             }).setNegativeButton("Delete", null).show();
                     break;
                 case R.id.buttonDelete:
-                    //利用游标遍历所有数据对象
-                    //为了显示全部，把所有对象连接起来，放到TextView中
                     while (cursor.moveToNext()) {
                         String name = cursor.getString(cursor.getColumnIndex("Name"));
                         strSavings = addDataToArray(strSavings, name);
@@ -149,9 +156,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.buttonRestore:
-                    //利用游标遍历所有数据对象
-                    //为了显示全部，把所有对象连接起来，放到TextView中
-
                     while (cursor.moveToNext()) {
                         String name = cursor.getString(cursor.getColumnIndex("Name"));
                         strSavings = addDataToArray(strSavings, name);
@@ -181,20 +185,26 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.buttonUp:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos1 += 10;
-                    currentServoPos2 += 10;
+                    currentServoPos1 += 5;
+                    mBlue.SendMessage("u");
                     break;
                 case R.id.buttonLeft:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
+                    currentServoPos2 -= 5;
+                    mBlue.SendMessage("l");
                     break;
                 case R.id.buttonRight:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
+                    currentServoPos2 += 5;
+                    mBlue.SendMessage("r");
                     break;
                 case R.id.buttonDown:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
+                    currentServoPos1 -= 5;
+                    mBlue.SendMessage("d");
                     break;
                 case R.id.buttonBTConnect:
                     if (mBlue.Connect()) {
@@ -204,9 +214,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.buttonBTCMD1:
-                    mBlue.SendMessage("CMD01");
+                    //quit from cam activity, notify arduino (just in case)
+                    mBlue.SendMessage("C");
                     break;
-
             }
         }
     }
