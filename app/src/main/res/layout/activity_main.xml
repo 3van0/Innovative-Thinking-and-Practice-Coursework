@@ -61,28 +61,35 @@
 
         <Button
             android:id="@+id/buttonSave"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="Save"
+            android:layout_weight="1"
             android:textAllCaps="false"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:id="@+id/buttonDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Delete"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <Button
+            android:id="@+id/buttonRestore"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Restore"
+            android:layout_weight="1"
+            android:textAllCaps="false"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
 
 
-
-
-        <android.support.v7.widget.LinearLayoutCompat
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:gravity="right">
-
-            <Button
-                android:id="@+id/buttonRestore"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
-                android:layout_marginRight="20dp"
-                android:text="Restore"
-                android:textAllCaps="false"/>
-        </android.support.v7.widget.LinearLayoutCompat>
 
     </android.support.v7.widget.LinearLayoutCompat>
 
@@ -90,13 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <Button
-            android:id="@+id/buttonDelete"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="Delete"
-            android:textAllCaps="false"
-            android:layout_gravity="center_horizontal"/>
+
 
     </android.support.v7.widget.LinearLayoutCompat>
 
@@ -105,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="50dp">
+        android:paddingTop="20dp">
         <Button
             android:id="@+id/buttonUp"
             android:layout_width="100dp"

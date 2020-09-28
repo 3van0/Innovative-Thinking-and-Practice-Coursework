@@ -24,7 +24,7 @@ public class BluetoothArduino extends Thread {
     OutputStream mOut;
     InputStream mIn;
     private boolean robotFound = false;
-    private boolean connected = false;
+    public boolean connected = false;
     private int REQUEST_BLUE_ATIVAR = 10;
     private String robotName;
     private List<String> mMessages = new ArrayList<String>();
@@ -33,19 +33,19 @@ public class BluetoothArduino extends Thread {
 
     private static BluetoothArduino __blue = null;
 
-    public static BluetoothArduino getInstance(String n){
+    public static BluetoothArduino getInstance(String n) {
         return __blue == null ? new BluetoothArduino(n) : __blue;
     }
 
-    public static BluetoothArduino getInstance(){
+    public static BluetoothArduino getInstance() {
         return __blue == null ? new BluetoothArduino() : __blue;
     }
 
 
-    private  BluetoothArduino(String Name){
+    private BluetoothArduino(String Name) {
         __blue = this;
         try {
-            for(int i = 0; i < 2048; i++){
+            for (int i = 0; i < 2048; i++) {
                 mMessages.add("");
             }
             robotName = Name;
@@ -72,24 +72,24 @@ public class BluetoothArduino extends Thread {
             if (!robotFound)
                 LogError("\t\t[#]There is not robot paired!!");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             LogError("\t\t[#]Erro creating Bluetooth! : " + e.getMessage());
         }
 
     }
 
-    BluetoothArduino(){
+    BluetoothArduino() {
         this("Arduino-Robot");
     }
 
-    public boolean isBluetoothEnabled(){
+    public boolean isBluetoothEnabled() {
         return mBlueAdapter.isEnabled();
     }
 
-    public boolean Connect(){
-        if(!robotFound)
+    public boolean Connect() {
+        if (!robotFound)
             return false;
-        try{
+        try {
             LogMessage("\t\tConncting to the robot...");
 //00001105-0000-1000-8000-00805f9B34FB  00001101-0000-1000-8000-00805f9b34fb
             UUID uuid = UUID.fromString("00001105-0000-1000-8000-00805f9b34fb");
@@ -116,11 +116,11 @@ public class BluetoothArduino extends Thread {
             LogMessage("\t\tOk!!");
             return true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
             LogError("\t\t[#]Error while conecting: " + e.getMessage());
             try {
-                Method m = mBlueRobo.getClass().getMethod("createRfcommSocket", new Class[] {int.class});
+                Method m = mBlueRobo.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
                 mBlueSocket = (BluetoothSocket) m.invoke(mBlueRobo, 1);
                 mBlueSocket.connect();
                 System.out.println("第二次");
@@ -133,29 +133,29 @@ public class BluetoothArduino extends Thread {
                 LogMessage("\t\tOk!!");
                 return true;
             } catch (Exception e1) {
-                Log.e("BLUE",e1.toString());
+                Log.e("BLUE", e1.toString());
                 System.out.println("第二次失败");
-                try{
+                try {
                     mBlueSocket.close();
-                }catch (IOException ie){
+                } catch (IOException ie) {
 
-                }finally {
+                } finally {
                     return false;
                 }
             }
         }
     }
 
-    public void run(){
+    public void run() {
 
         while (true) {
-            if(connected) {
+            if (connected) {
                 try {
                     byte ch, buffer[] = new byte[1024];
                     int i = 0;
 
                     String s = "";
-                    while((ch=(byte)mIn.read()) != DELIMITER){
+                    while ((ch = (byte) mIn.read()) != DELIMITER) {
                         buffer[i++] = ch;
                     }
                     buffer[i] = '\0';
@@ -172,76 +172,77 @@ public class BluetoothArduino extends Thread {
         }
     }
 
-    private void MessageReceived(String msg){
+    private void MessageReceived(String msg) {
         try {
 
             mMessages.add(msg);
             try {
                 this.notify();
-            }catch (IllegalMonitorStateException e){
+            } catch (IllegalMonitorStateException e) {
                 //
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             LogError("->[#] Failed to receive message: " + e.getMessage());
         }
     }
 
-    public boolean hasMensagem(int i){
-        try{
+    public boolean hasMensagem(int i) {
+        try {
             String s = mMessages.get(i);
-            if(s.length() > 0)
+            if (s.length() > 0)
                 return true;
             else
                 return false;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public String getMenssage(int i){
+    public String getMenssage(int i) {
         return mMessages.get(i);
     }
 
-    public void clearMessages(){
+    public void clearMessages() {
         mMessages.clear();
     }
 
-    public int countMessages(){
+    public int countMessages() {
         return mMessages.size();
     }
 
-    public String getLastMessage(){
-        if(countMessages() == 0)
+    public String getLastMessage() {
+        if (countMessages() == 0)
             return "";
-        return mMessages.get(countMessages()-1);
+        return mMessages.get(countMessages() - 1);
     }
 
-    public void SendMessage(String msg){
+    public void SendMessage(String msg) {
         System.out.println("执行发送");
         try {
-            if(connected) {
+            if (connected) {
                 mOut.write(msg.getBytes());
-                System.out.println("发送长度"+msg.getBytes().length);
-             //   mOut.write(1);
+                System.out.println("发送长度" + msg.getBytes().length);
+                //   mOut.write(1);
             }
 
-        } catch (IOException e){
+        } catch (IOException e) {
             LogError("->[#]Error while sending message: " + e.getMessage());
         }
     }
 
-    private void LogMessage(String msg){
+    private void LogMessage(String msg) {
         Log.d(TAG, msg);
     }
 
-    private void LogError(String msg){
+    private void LogError(String msg) {
         Log.e(TAG, msg);
     }
 
-    public void setDelimiter(char d){
+    public void setDelimiter(char d) {
         DELIMITER = d;
     }
-    public char getDelimiter(){
+
+    public char getDelimiter() {
         return DELIMITER;
     }
 

@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         setListeners();
 
 
-
     }
 
     private void setListeners() {
@@ -107,14 +106,18 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.buttonGoToHorizontal:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos1 = Integer.parseInt(mtextHorizontalAngle.getText().toString());
-                    mBlue.SendMessage("h" + currentServoPos1 );
+                    if (mBlue.connected) {
+                        currentServoPos1 = Integer.parseInt(mtextHorizontalAngle.getText().toString());
+                        mBlue.SendMessage("h" + currentServoPos1);
+                    }
                     break;
                 case R.id.buttonGoToVertical:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos2 = Integer.parseInt(mtextVerticalAngle.getText().toString());
-                    mBlue.SendMessage("v" + currentServoPos2);
+                    if (mBlue.connected) {
+                        currentServoPos2 = Integer.parseInt(mtextVerticalAngle.getText().toString());
+                        mBlue.SendMessage("v" + currentServoPos2);
+                    }
                     break;
                 case R.id.buttonSave:
                     final EditText et = new EditText(MainActivity.this);
@@ -140,71 +143,82 @@ public class MainActivity extends AppCompatActivity {
                         strSavings = addDataToArray(strSavings, name);
                     }
                     cursor.close();
-                    if (strSavings.length==0){
+                    if (strSavings.length == 0) {
                         break;
-                    }else {
+                    } else {
                         final String[] finalStrSavings = strSavings;
                         new AlertDialog.Builder(MainActivity.this).setTitle("Restore Pos")
                                 .setItems(strSavings, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         Toast.makeText(getApplicationContext(), finalStrSavings[i], Toast.LENGTH_SHORT).show();
-                                        db.delete("tableSave","Name=?",new String[]{finalStrSavings[i]});
+                                        db.delete("tableSave", "Name=?", new String[]{finalStrSavings[i]});
                                     }
                                 }).show();
                     }
                     break;
 
                 case R.id.buttonRestore:
-                    while (cursor.moveToNext()) {
-                        String name = cursor.getString(cursor.getColumnIndex("Name"));
-                        strSavings = addDataToArray(strSavings, name);
-                    }
-                    cursor.close();
-                    if (strSavings.length==0){
-                        break;
-                    }else {
-                        final String[] finalStrSavings = strSavings;
-                        new AlertDialog.Builder(MainActivity.this).setTitle("Restore Pos")
-                                .setItems(strSavings, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Toast.makeText(getApplicationContext(), finalStrSavings[i], Toast.LENGTH_SHORT).show();
-                                        Cursor newcursor = db.query("tableSave", null,  "Name=?", new String[]{finalStrSavings[i]}, null, null, null);
-                                        newcursor.moveToFirst();
-                                        currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
-                                        currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
-                                        newcursor.close();
-                                        //蓝牙传输两个位置数据
-                                        Toast.makeText(getApplicationContext(), currentServoPos1+"", Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(getApplicationContext(), currentServoPos2+"", Toast.LENGTH_SHORT).show();
-                                    }
-                                }).show();
+                    if (mBlue.connected) {
+                        while (cursor.moveToNext()) {
+                            String name = cursor.getString(cursor.getColumnIndex("Name"));
+                            strSavings = addDataToArray(strSavings, name);
+                        }
+                        cursor.close();
+                        if (strSavings.length == 0) {
+                            break;
+                        } else {
+                            final String[] finalStrSavings = strSavings;
+                            new AlertDialog.Builder(MainActivity.this).setTitle("Restore Pos")
+                                    .setItems(strSavings, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Toast.makeText(getApplicationContext(), finalStrSavings[i], Toast.LENGTH_SHORT).show();
+                                            Cursor newcursor = db.query("tableSave", null, "Name=?", new String[]{finalStrSavings[i]}, null, null, null);
+                                            newcursor.moveToFirst();
+                                            currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
+                                            currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
+                                            newcursor.close();
+                                            //蓝牙传输两个位置数据
+                                            Toast.makeText(getApplicationContext(), currentServoPos1 + "", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), currentServoPos2 + "", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).show();
+                        }
                     }
                     break;
                 case R.id.buttonUp:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos1 += 5;
-                    mBlue.SendMessage("u");
+                    if (mBlue.connected) {
+                        currentServoPos1 += 5;
+                        mBlue.SendMessage("u");
+                    }
+
                     break;
                 case R.id.buttonLeft:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos2 -= 5;
-                    mBlue.SendMessage("l");
+                    if (mBlue.connected) {
+                        currentServoPos2 -= 5;
+                        mBlue.SendMessage("l");
+                    }
                     break;
                 case R.id.buttonRight:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos2 += 5;
-                    mBlue.SendMessage("r");
+                    if (mBlue.connected) {
+                        currentServoPos2 += 5;
+                        mBlue.SendMessage("r");
+                    }
                     break;
                 case R.id.buttonDown:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
-                    currentServoPos1 -= 5;
-                    mBlue.SendMessage("d");
+                    if (mBlue.connected) {
+                        currentServoPos1 -= 5;
+                        mBlue.SendMessage("d");
+                    }
                     break;
                 case R.id.buttonBTConnect:
                     if (mBlue.Connect()) {
