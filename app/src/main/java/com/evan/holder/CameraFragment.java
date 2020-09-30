@@ -54,7 +54,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class CameraFragment extends Fragment {
 
+
     BluetoothArduino mBlue = BluetoothArduino.getInstance("G8");
+
+    detectAsync detect;
 
     /**
      * Tag for the {@link Log}.
@@ -111,7 +114,7 @@ public class CameraFragment extends Fragment {
                 Bitmap bp = mTextureView.getBitmap();
                 bp = Bitmap.createBitmap(bp, 0, 0, bp.getWidth(), bp.getHeight(), mTextureView.getTransform(null), true);
 
-                new detectAsync().execute(bp);
+                detect = (detectAsync) new detectAsync().execute(bp);
             }
         }
     };
@@ -327,6 +330,7 @@ public class CameraFragment extends Fragment {
     public void onPause() {
         closeCamera();
         stopBackgroundThread();
+        detect.cancel(true);
 
         if (mFaceDet != null) {
             mFaceDet.release();
@@ -635,16 +639,25 @@ public class CameraFragment extends Fragment {
         }
 
         protected void onPostExecute(List<VisionDetRet> results) {
-            String text = "";
+            int pos = 0;
             int maxface = 0;
             int face;
+            int height = mPreviewSize.getWidth();
+            String text = "";
             mBoundingBoxView.setResults(results);
             for (VisionDetRet detRet : results) {
                 face = Math.abs(detRet.getTop() - detRet.getBottom());
                 if (face>maxface){
-                    text = (detRet.getBottom() + detRet.getTop())/2 + "";
+                    pos = (detRet.getBottom() + detRet.getTop())/2;
                     maxface = face;
                 }
+            }
+            if (pos < 2*height/5) {
+                text = "t";
+            } else if (pos > 3*height/5) {
+                text = "b";
+            } else {
+                text = "c";
             }
             mtextView.setText(text);
             mBlue.SendMessage(text);

@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     DBHelper mDBHelper = new DBHelper(this, "test_db", null, 1);
 
-    private int currentServoPos1 = 0;
-    private int currentServoPos2 = 0;
+    private int currentServoPos1 = 105;
+    private int currentServoPos2 = 50;
 
 
     @Override
@@ -66,6 +66,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    /*
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        Cursor newcursor = db.query("tableSave", null, "Name=?", new String[]{"CanSave"}, null, null, null);
+        newcursor.moveToFirst();
+        currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
+        currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
+        newcursor.close();
+    }
+
+     */
 
     private void setListeners() {
         OnClick onclick = new OnClick();
@@ -96,10 +110,20 @@ public class MainActivity extends AppCompatActivity {
             String[] strSavings = new String[0];
             //创建游标对象
             final SQLiteDatabase db = mDBHelper.getWritableDatabase();
+
             Cursor cursor = db.query("tableSave", new String[]{"Name"}, null, null, null, null, null);
 
             switch (view.getId()) {
                 case R.id.buttonCamActivity:
+                    if (mBlue.connected) {
+                        mBlue.SendMessage("f");
+                    }
+
+                    ContentValues values = new ContentValues();
+                    values.put("Name", "CamSave");
+                    values.put("ServoPos1", currentServoPos1);
+                    values.put("ServoPos2", currentServoPos2);
+                    db.insert("tableTrans", null, values);
                     Intent intent = new Intent(MainActivity.this, CamActivity.class);
                     startActivity(intent);
                     break;
@@ -180,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                                             currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
                                             newcursor.close();
                                             //蓝牙传输两个位置数据
+                                            mBlue.SendMessage("sh" + currentServoPos1 + "v" + currentServoPos2);
                                             Toast.makeText(getApplicationContext(), currentServoPos1 + "", Toast.LENGTH_SHORT).show();
                                             Toast.makeText(getApplicationContext(), currentServoPos2 + "", Toast.LENGTH_SHORT).show();
                                         }
@@ -191,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos1 += 5;
+                        currentServoPos2 += 5;
                         mBlue.SendMessage("u");
                     }
 
@@ -200,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos2 -= 5;
+                        currentServoPos1 -= 5;
                         mBlue.SendMessage("l");
                     }
                     break;
@@ -208,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos2 += 5;
+                        currentServoPos1 += 5;
                         mBlue.SendMessage("r");
                     }
                     break;
@@ -216,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos1 -= 5;
+                        currentServoPos2 -= 5;
                         mBlue.SendMessage("d");
                     }
                     break;
@@ -229,9 +254,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonBTCMD1:
                     //quit from cam activity, notify arduino (just in case)
-                    mBlue.SendMessage("C");
+                    mBlue.SendMessage("r");
                     break;
             }
         }
     }
+
+
 }

@@ -14,11 +14,17 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "create table if not exists tableSave (_id integer primary key autoincrement, Name text, ServoPos1 integer, ServoPos2 integer)";
+        String sql2 = "create table if not exists tableTrans (_id integer primary key autoincrement, Name text, ServoPos1 integer, ServoPos2 integer)";
         db.execSQL(sql);
+        db.execSQL(sql2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+
+    }
+
+    public void addData(SQLiteDatabase db,int x, int y) {
 
     }
 }
