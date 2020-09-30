@@ -260,14 +260,14 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonBTConnect:
                     if (mBlue.Connect()) {
-                        mBlue.SendMessage("connected");
+                        mBlue.SendMessage("e");
                     } else {
                         Toast.makeText(getApplicationContext(), "Bluetooth not found", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonBTCMD1:
                     //quit from cam activity, notify arduino (just in case)
-                    mBlue.SendMessage("r");
+                    mBlue.SendMessage("t");
                     break;
             }
         }
