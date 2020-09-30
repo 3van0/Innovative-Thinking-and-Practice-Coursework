@@ -37,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
     BluetoothArduino mBlue = BluetoothArduino.getInstance("G8");
 
-    DBHelper mDBHelper = new DBHelper(this, "test_db", null, 1);
+    //DBHelper mDBHelper = new DBHelper(this, "test_db", null, 1);
+
+    //DBHelper mDBHelper;
+    SQLiteDatabase dB;
 
     private int currentServoPos1 = 105;
     private int currentServoPos2 = 50;
@@ -62,24 +65,29 @@ public class MainActivity extends AppCompatActivity {
         mtextHorizontalAngle = findViewById(R.id.textHorizontalAngle);
         mtextVerticalAngle = findViewById(R.id.textVerticalAngle);
 
+
+        // mDBHelper = DBHelper.getInstance().getHelper();
+        dB = DBHelper.getInstance(this);
         setListeners();
 
 
     }
 
-    /*
+
     @Override
     protected void onRestart() {
         super.onRestart();
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        Cursor newcursor = db.query("tableSave", null, "Name=?", new String[]{"CanSave"}, null, null, null);
+        // mBlue.Connect();
+        Cursor newcursor = dB.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
         newcursor.moveToFirst();
         currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
         currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
         newcursor.close();
+        Toast.makeText(this, currentServoPos1 + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, currentServoPos2 + "", Toast.LENGTH_SHORT).show();
     }
 
-     */
+
 
     private void setListeners() {
         OnClick onclick = new OnClick();
@@ -109,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             String[] strSavings = new String[0];
             //创建游标对象
-            final SQLiteDatabase db = mDBHelper.getWritableDatabase();
+            final SQLiteDatabase db = dB;
 
             Cursor cursor = db.query("tableSave", new String[]{"Name"}, null, null, null, null, null);
 
@@ -118,12 +126,17 @@ public class MainActivity extends AppCompatActivity {
                     if (mBlue.connected) {
                         mBlue.SendMessage("f");
                     }
-
+                    Cursor newcursor = db.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
                     ContentValues values = new ContentValues();
                     values.put("Name", "CamSave");
                     values.put("ServoPos1", currentServoPos1);
                     values.put("ServoPos2", currentServoPos2);
-                    db.insert("tableTrans", null, values);
+                    if (newcursor.moveToFirst()) {
+                        db.update("tableTrans", values, "Name=?", new String[]{"CamSave"});
+                    } else {
+                        db.insert("tableTrans", null, values);
+                    };
+
                     Intent intent = new Intent(MainActivity.this, CamActivity.class);
                     startActivity(intent);
                     break;
@@ -151,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Toast.makeText(getApplicationContext(), et.getText().toString(), Toast.LENGTH_SHORT).show();
-                                    SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                                    //SQLiteDatabase db = mDBHelper.getWritableDatabase();
                                     //strSavings = addDataToArray(strSavings, et.getText().toString());
                                     ContentValues values = new ContentValues();
                                     values.put("Name", et.getText().toString());

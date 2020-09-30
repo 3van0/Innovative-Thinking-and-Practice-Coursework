@@ -7,8 +7,18 @@ import android.support.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    public static DBHelper dbHelper;
+
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+    }
+
+    public static SQLiteDatabase getInstance(Context context) {
+        if (dbHelper == null) {
+            // 指定数据库名为student，需修改时在此修改；此处使用默认工厂；指定版本为1
+            dbHelper = new DBHelper(context, "test_db", null, 1);
+        }
+        return dbHelper.getReadableDatabase();
     }
 
     @Override

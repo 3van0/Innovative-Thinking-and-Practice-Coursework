@@ -146,6 +146,15 @@ public class BluetoothArduino extends Thread {
         }
     }
 
+    public void Disconnect() {
+        try {
+            mBlueSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void run() {
 
         while (true) {

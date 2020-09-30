@@ -3,9 +3,12 @@ package com.evan.holder;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -58,6 +61,11 @@ public class CameraFragment extends Fragment {
     BluetoothArduino mBlue = BluetoothArduino.getInstance("G8");
 
     detectAsync detect;
+
+    SQLiteDatabase dB;
+
+    int currentServoPos1 = 0;
+    int currentServoPos2 = 0;
 
     /**
      * Tag for the {@link Log}.
@@ -306,6 +314,17 @@ public class CameraFragment extends Fragment {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.textureView);
         mBoundingBoxView = (BoundingBoxView) view.findViewById(R.id.boundingBoxView);
         mtextView = (AppCompatAutoCompleteTextView) view.findViewById(R.id.textView);
+
+        dB = DBHelper.getInstance(super.getContext());
+        Cursor newcursor = dB.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
+        newcursor.moveToFirst();
+        currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
+        currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
+        newcursor.close();
+        Toast.makeText(super.getContext(), currentServoPos1 + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(super.getContext(), currentServoPos2 + "", Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
@@ -653,12 +672,19 @@ public class CameraFragment extends Fragment {
                 }
             }
             if (pos < 2*height/5) {
+                currentServoPos2 += 5;
                 text = "t";
             } else if (pos > 3*height/5) {
+                currentServoPos2 -= 5;
                 text = "b";
             } else {
                 text = "c";
             }
+            ContentValues values = new ContentValues();
+            values.put("Name", "CamSave");
+            values.put("ServoPos1", currentServoPos1);
+            values.put("ServoPos2", currentServoPos2);
+            dB.update("tableTrans", values, "Name=?", new String[]{"CamSave"});
             mtextView.setText(text);
             mBlue.SendMessage(text);
             mIsDetecting = false;
