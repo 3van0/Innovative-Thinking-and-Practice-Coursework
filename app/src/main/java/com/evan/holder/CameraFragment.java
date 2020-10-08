@@ -658,34 +658,57 @@ public class CameraFragment extends Fragment {
         }
 
         protected void onPostExecute(List<VisionDetRet> results) {
-            int pos = 0;
+            int posV = 0;
+            int posH = 0;
             int maxface = 0;
             int face;
             int height = mPreviewSize.getWidth();
+            int width = mPreviewSize.getHeight();
             Activity activity = getActivity();
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-                height = mPreviewSize.getHeight();
-            }
+
 
             String text = "";
             mBoundingBoxView.setResults(results);
             for (VisionDetRet detRet : results) {
                 face = Math.abs(detRet.getTop() - detRet.getBottom());
-                if (face>maxface){
-                    pos = (detRet.getBottom() + detRet.getTop())/2;
+                if (face > maxface) {
+                    posV = (detRet.getBottom() + detRet.getTop()) / 2;
+                    posH = (detRet.getLeft() + detRet.getRight()) / 2;
                     maxface = face;
                 }
             }
-            if (pos < 2*height/5) {
+            /*
+            if (pos < 2 * width / 5) {
+                currentServoPos2 += 5;
+                text = "L";
+            } else if (pos > 3 * width / 5) {
+                currentServoPos2 -= 5;
+                text = "R";
+            } else {
+                text = "C";
+            }
+
+             */
+            if (posV < 2 * height / 5) {
                 currentServoPos2 += 5;
                 text = "t";
-            } else if (pos > 3*height/5) {
+            } else if (posV > 3 * height / 5) {
                 currentServoPos2 -= 5;
                 text = "b";
             } else {
                 text = "c";
             }
+            if (posH < 2 * width / 5) {
+                currentServoPos2 += 5;
+                text += "l";
+            } else if (posH > 3 * width / 5) {
+                currentServoPos2 -= 5;
+                text += "r";
+            } else {
+                text += "c";
+            }
+
             ContentValues values = new ContentValues();
             values.put("Name", "CamSave");
             values.put("ServoPos1", currentServoPos1);
