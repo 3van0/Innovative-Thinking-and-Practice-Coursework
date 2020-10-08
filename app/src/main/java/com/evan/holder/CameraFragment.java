@@ -662,6 +662,12 @@ public class CameraFragment extends Fragment {
             int maxface = 0;
             int face;
             int height = mPreviewSize.getWidth();
+            Activity activity = getActivity();
+            int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+                height = mPreviewSize.getHeight();
+            }
+
             String text = "";
             mBoundingBoxView.setResults(results);
             for (VisionDetRet detRet : results) {
