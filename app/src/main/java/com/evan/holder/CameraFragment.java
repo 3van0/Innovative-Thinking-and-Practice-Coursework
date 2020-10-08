@@ -666,7 +666,10 @@ public class CameraFragment extends Fragment {
             int width = mPreviewSize.getHeight();
             Activity activity = getActivity();
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-
+            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+                height = mPreviewSize.getHeight();
+                width = mPreviewSize.getWidth();
+            }
 
             String text = "";
             mBoundingBoxView.setResults(results);
@@ -691,19 +694,19 @@ public class CameraFragment extends Fragment {
 
              */
             if (posV < 2 * height / 5) {
-                currentServoPos2 += 5;
+                currentServoPos2 += 3;
                 text = "t";
             } else if (posV > 3 * height / 5) {
-                currentServoPos2 -= 5;
+                currentServoPos2 -= 3;
                 text = "b";
             } else {
                 text = "c";
             }
             if (posH < 2 * width / 5) {
-                currentServoPos2 += 5;
+                currentServoPos1 -= 3;
                 text += "l";
             } else if (posH > 3 * width / 5) {
-                currentServoPos2 -= 5;
+                currentServoPos1 += 3;
                 text += "r";
             } else {
                 text += "c";
