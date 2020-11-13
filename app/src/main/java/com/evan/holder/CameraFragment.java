@@ -63,7 +63,7 @@ public class CameraFragment extends Fragment {
     detectAsync detect;
 
     SQLiteDatabase dB;
-
+    //初始化两个方向位置
     int currentServoPos1 = 0;
     int currentServoPos2 = 0;
 
@@ -658,12 +658,17 @@ public class CameraFragment extends Fragment {
         }
 
         protected void onPostExecute(List<VisionDetRet> results) {
+            /*
             int posV = 0;
             int posH = 0;
-            int maxface = 0;
-            int face;
+             */
             int height = mPreviewSize.getWidth();
             int width = mPreviewSize.getHeight();
+            int posV = height / 2;
+            int posH = width / 2;
+            int maxface = 0;
+            int face;
+
             Activity activity = getActivity();
             int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
             if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {

@@ -247,12 +247,4 @@ public class BluetoothArduino extends Thread {
         Log.e(TAG, msg);
     }
 
-    public void setDelimiter(char d) {
-        DELIMITER = d;
-    }
-
-    public char getDelimiter() {
-        return DELIMITER;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.evan.holder;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,16 +78,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        // mBlue.Connect();
+        //while quit from CamActivity, or restart process, retrieve current pos from db
         Cursor newcursor = dB.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
-        newcursor.moveToFirst();
-        currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
-        currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
+        if (newcursor.moveToFirst()) {
+            currentServoPos1 = newcursor.getInt(newcursor.getColumnIndex("ServoPos1"));
+            currentServoPos2 = newcursor.getInt(newcursor.getColumnIndex("ServoPos2"));
+        }
         newcursor.close();
+        /*
         Toast.makeText(this, currentServoPos1 + "", Toast.LENGTH_SHORT).show();
         Toast.makeText(this, currentServoPos2 + "", Toast.LENGTH_SHORT).show();
+         */
+
     }
 
+    @Override
+    protected void onStop() {
+        Cursor cursor = dB.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
+        ContentValues values = new ContentValues();
+        values.put("Name", "CamSave");
+        values.put("ServoPos1", currentServoPos1);
+        values.put("ServoPos2", currentServoPos2);
+        if (cursor.moveToFirst()) {
+            dB.update("tableTrans", values, "Name=?", new String[]{"CamSave"});
+        } else {
+            dB.insert("tableTrans", null, values);
+        }
+        cursor.close();
+        super.onStop();
+    }
 
 
     private void setListeners() {
@@ -113,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private class OnClick implements View.OnClickListener {
 
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View view) {
             String[] strSavings = new String[0];
@@ -135,8 +156,8 @@ public class MainActivity extends AppCompatActivity {
                         db.update("tableTrans", values, "Name=?", new String[]{"CamSave"});
                     } else {
                         db.insert("tableTrans", null, values);
-                    };
-
+                    }
+                    newcursor.close();
                     Intent intent = new Intent(MainActivity.this, CamActivity.class);
                     startActivity(intent);
                     break;
@@ -184,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     } else {
                         final String[] finalStrSavings = strSavings;
-                        new AlertDialog.Builder(MainActivity.this).setTitle("Restore Pos")
+                        new AlertDialog.Builder(MainActivity.this).setTitle("Delete Pos")
                                 .setItems(strSavings, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -267,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonBTCMD1:
                     //quit from cam activity, notify arduino (just in case)
+                    //currentServoPos1 += 5;
                     mBlue.SendMessage("t");
                     break;
             }
