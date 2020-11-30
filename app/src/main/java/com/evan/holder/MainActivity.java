@@ -146,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.buttonCamActivity:
                     if (mBlue.connected) {
                         mBlue.SendMessage("f");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
+                        break;
                     }
                     Cursor newcursor = db.query("tableTrans", null, "Name=?", new String[]{"CamSave"}, null, null, null);
                     ContentValues values = new ContentValues();
@@ -165,16 +168,28 @@ public class MainActivity extends AppCompatActivity {
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos1 = Integer.parseInt(mtextHorizontalAngle.getText().toString());
-                        mBlue.SendMessage("h" + currentServoPos1);
+                        if (!mtextHorizontalAngle.getText().toString().equals("")) {
+                            currentServoPos1 = Integer.parseInt(mtextHorizontalAngle.getText().toString());
+                            mBlue.SendMessage("h" + currentServoPos1);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Empty input!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonGoToVertical:
                     //BT write;
                     //update currentServoPos1, currentServoPos2
                     if (mBlue.connected) {
-                        currentServoPos2 = Integer.parseInt(mtextVerticalAngle.getText().toString());
-                        mBlue.SendMessage("v" + currentServoPos2);
+                        if (mtextVerticalAngle.getText().toString().equals("")){
+                            currentServoPos2 = Integer.parseInt(mtextVerticalAngle.getText().toString());
+                            mBlue.SendMessage("v" + currentServoPos2);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Empty input!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonSave:
@@ -244,6 +259,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonUp:
@@ -252,8 +269,9 @@ public class MainActivity extends AppCompatActivity {
                     if (mBlue.connected) {
                         currentServoPos2 += 5;
                         mBlue.SendMessage("u");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
-
                     break;
                 case R.id.buttonLeft:
                     //BT write;
@@ -261,6 +279,8 @@ public class MainActivity extends AppCompatActivity {
                     if (mBlue.connected) {
                         currentServoPos1 -= 5;
                         mBlue.SendMessage("l");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonRight:
@@ -269,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
                     if (mBlue.connected) {
                         currentServoPos1 += 5;
                         mBlue.SendMessage("r");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonDown:
@@ -277,13 +299,15 @@ public class MainActivity extends AppCompatActivity {
                     if (mBlue.connected) {
                         currentServoPos2 -= 5;
                         mBlue.SendMessage("d");
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Bluetooth disconnected", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonBTConnect:
                     if (mBlue.Connect()) {
                         mBlue.SendMessage("e");
                     } else {
-                        Toast.makeText(getApplicationContext(), "Bluetooth not found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "No Bluetooth called 'G8' found", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.buttonBTCMD1:
